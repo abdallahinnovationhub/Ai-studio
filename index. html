@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07152f">
+<title>ABDALLAH AI STUDIO</title>
+
+<style>
+:root {
+  --bg:#07152f;
+  --panel:#10264b;
+  --blue:#168cff;
+  --gold:#f4c45e;
+  --text:#f4f7ff;
+  --muted:#aabbd5;
+  --border:#29466f;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:linear-gradient(135deg,#061126,#102b53,#061126);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+header {
+  padding:22px 16px;
+  text-align:center;
+  background:#081a37;
+  border-bottom:2px solid var(--gold);
+}
+header h1 {margin:0;color:var(--gold);font-size:25px}
+header p {color:var(--muted)}
+nav {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+  padding:12px;
+  background:#0a1d3b;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+nav button,.button {
+  border:0;
+  border-radius:8px;
+  padding:11px 15px;
+  background:var(--blue);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+nav button:hover,.button:hover {background:#086ac7}
+main {max-width:1050px;margin:auto;padding:16px}
+section {
+  display:none;
+  background:rgba(16,38,75,.96);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:20px;
+}
+section.active {display:block}
+h2 {color:var(--gold);margin-top:0}
+h3 {color:#8fcaff}
+label {
+  display:block;
+  margin:13px 0 6px;
+  color:#dceaff;
+  font-weight:bold;
+}
+input,select,textarea {
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #42618d;
+  background:#071a36;
+  color:white;
+  font-size:15px;
+}
+textarea {min-height:85px;resize:vertical}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.card {
+  background:#0a1d3a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:15px;
+  margin:15px 0;
+}
+.gold {color:var(--gold)}
+.muted {color:var(--muted);font-size:13px;line-height:1.6}
+.result {
+  padding:15px;
+  margin-top:15px;
+  background:#06162e;
+  border:1px solid var(--blue);
+  border-radius:10px;
+}
+.character {
+  border:1px solid #42618d;
+  padding:15px;
+  border-radius:10px;
+  margin:12px 0;
+}
+.danger {color:#ffb4b4}
+footer {
+  text-align:center;
+  padding:25px;
+  color:var(--muted);
+}
+button:disabled {opacity:.5;cursor:not-allowed}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>ABDALLAH AI STUDIO</h1>
+  <p>Imagine It. Create It. Bring It to Life.</p>
+</header>
+
+<nav>
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('video')">AI Video</button>
+  <button onclick="showPage('image')">AI Images</button>
+  <button onclick="showPage('voice')">AI Voice</button>
+  <button onclick="showPage('friend')">AI Friend</button>
+  <button onclick="showPage('homework')">Homework</button>
+  <button onclick="showPage('account')">Account</button>
+  <button onclick="showPage('admin')">Admin</button>
+</nav>
+
+<main>
+
+<section id="home" class="active">
+  <h2>Welcome to ABDALLAH AI STUDIO</h2>
+  <p>Create videos, images, voices and learn with AI.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>🎬 AI Video Generator</h3>
+      <p>Describe your video and customise its scenes.</p>
+      <button class="button" onclick="showPage('video')">Create Video</button>
+    </div>
+    <div class="card">
+      <h3>🖼️ AI Image Generator</h3>
+      <p>Turn your ideas into images.</p>
+      <button class="button" onclick="showPage('image')">Create Image</button>
+    </div>
+    <div class="card">
+      <h3>🎙️ AI Voice Generator</h3>
+      <p>Create voice content in different languages.</p>
+      <button class="button" onclick="showPage('voice')">Create Voice</button>
+    </div>
+    <div class="card">
+      <h3>📚 Homework Assistant</h3>
+      <p>Get explanations and learning support.</p>
+      <button class="button" onclick="showPage('homework')">Start Learning</button>
+    </div>
+  </div>
+</section>
+
+<section id="video">
+  <h2>🎬 AI Video Studio</h2>
+  <p class="muted">Describe exactly what you want the AI to create.</p>
+
+  <label>Video category</label>
+  <select id="style">
+    <option>Realistic Human</option>
+    <option>2D Animation</option>
+    <option>3D Animation</option>
+    <option>3D Cartoon</option>
+    <option>Talking Animals</option>
+    <option>Educational Video</option>
+    <option>Fantasy</option>
+    <option>Cinematic Movie Scene</option>
+    <option>Documentary</option>
+    <option>Other</option>
+  </select>
+
+  <h3>Scene description</h3>
+
+  <label>What should happen in the video?</label>
+  <textarea id="story" placeholder="Describe the complete story, events and actions from beginning to end..."></textarea>
+
+  <div class="grid">
+    <div>
+      <label>Location / Setting</label>
+      <input id="location" placeholder="Example: school, house, hospital, market">
+    </div>
+    <div>
+      <label>Weather</label>
+      <select id="weather">
+        <option>Sunny</option>
+        <option>Rainy</option>
+        <option>Cloudy</option>
+        <option>Snowy</option>
+        <option>Windy</option>
+        <option>Stormy</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div>
+      <label>Time of day</label>
+      <select id="timeofday">
+        <option>Morning</option>
+        <option>Afternoon</option>
+        <option>Evening</option>
+        <option>Night</option>
+        <option>Sunrise</option>
+        <option>Sunset</option>
+      </select>
+    </div>
+    <div>
+      <label>Lighting</label>
+      <select id="lighting">
+        <option>Natural lighting</option>
+        <option>Bright lighting</option>
+        <option>Soft cinematic lighting</option>
+        <option>Dark dramatic lighting</option>
+        <option>Colourful lighting</option>
+      </select>
+    </div>
+  </div>
+
+  <h3>Characters and dialogue</h3>
+  <p class="muted">Add as many characters or animals as your scene needs. Each can have their own dialogue and voice.</p>
+
+  <div id="characters"></div>
+
+  <button class="button" type="button" onclick="addCharacter()">+ Add Character / Animal</button>
+
+  <h3>Camera and video quality</h3>
+
+  <div class="grid">
+    <div>
+      <label>Camera style</label>
+      <select id="camera">
+        <option>Cinematic camera</option>
+        <option>Close-up</option>
+        <option>Wide shot</option>
+        <option>Bird's-eye view</option>
+        <option>First-person view</option>
+        <option>Tracking shot</option>
+        <option>Professional documentary</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Video resolution</label>
+      <select id="resolution">
+        <option>1080p Full HD</option>
+        <option>480p</option>
+        <option>720p HD</option>
+        <option>2K</option>
+        <option>4K</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Video format</label>
+      <select id="format">
+        <option>16:9 Landscape</option>
+        <option>9:16 Portrait</option>
+        <option>1:1 Square</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Duration (minimum 5 minutes)</label>
+      <input type="number" id="minutes" min="5" max="120" value="5">
+      <p class="muted">Enter 5 minutes or more. Actual maximum depends on the connected AI video provider.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>💳 Estimated charge</h3>
+    <p>Price per minute: <strong id="rate">₦500</strong></p>
+    <p>Selected duration: <strong id="selectedMinutes">5 minutes</strong></p>
+    <h2 class="gold" id="totalPrice">₦2,500</h2>
+    <p class="muted">These are demonstration prices. Set your real prices in your secure backend before accepting payments.</p>
+  </div>
+
+  <button class="button" id="generateVideo" onclick="generateVideo()">Generate Video</button>
+
+  <div id="videoResult" class="result" hidden></div>
+</section>
+
+<section id="image">
+  <h2>🖼️ AI Image Generator</h2>
+  <label>Describe your image</label>
+  <textarea id="imagePrompt" placeholder="Describe the image you want..."></textarea>
+  <label>Image style</label>
+  <select id="imageStyle">
+    <option>Realistic</option>
+    <option>3D Cartoon</option>
+    <option>2D Animation</option>
+    <option>Professional Photography</option>
+    <option>Digital Art</option>
+  </select>
+  <button class="button" onclick="sendSimple('/image/generate',{prompt:document.getElementById('imagePrompt').value,style:document.getElementById('imageStyle').value},'imageResult')">Generate Image</button>
+  <div id="imageResult" class="result" hidden></div>
+</section>
+
+<section id="voice">
+  <h2>🎙️ AI Voice Generator</h2>
+  <label>Text to speak</label>
+  <textarea id="voiceText" placeholder="Enter the words you want spoken..."></textarea>
+  <div class="grid">
+    <div>
+      <label>Language</label>
+      <select id="voiceLanguage">
+        <option>English</option>
+        <option>Hausa</option>
+        <option>Arabic</option>
+        <option>French</option>
+        <option>Yoruba</option>
+        <option>Igbo</option>
+        <option>Spanish</option>
+      </select>
+    </div>
+    <div>
+      <label>Voice type</label>
+      <select id="voiceType">
+        <option>Male</option>
+        <option>Female</option>
+        <option>Childlike fictional voice</option>
+        <option>Professional narrator</option>
+      </select>
+    </div>
+  </div>
+  <button class="button" onclick="sendSimple('/voice/generate',{text:document.getElementById('voiceText').value,language:document.getElementById('voiceLanguage').value,voice:document.getElementById('voiceType').value},'voiceResult')">Generate Voice</button>
+  <div id="voiceResult" class="result" hidden></div>
+</section>
+
+<section id="friend">
+  <h2>🤖 AI Friend</h2>
+  <label>Your message</label>
+  <textarea id="friendMessage" placeholder="Ask your AI assistant something..."></textarea>
+  <button class="button" onclick="sendSimple('/chat',{message:document.getElementById('friendMessage').value},'friendResult')">Send Message</button>
+  <div id="friendResult" class="result" hidden></div>
+</section>
+
+<section id="homework">
+  <h2>📚 Homework Assistant</h2>
+  <div class="grid">
+    <div>
+      <label>Class</label>
+      <select id="schoolClass">
+        <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
+        <option>SSS 1</option><option>SSS 2</option><option>SSS 3</option>
+      </select>
+    </div>
+    <div>
+      <label>Subject</label>
+      <input id="subject" placeholder="Example: Mathematics">
+    </div>
+  </div>
+  <label>Question</label>
+  <textarea id="question" placeholder="Enter your question..."></textarea>
+  <button class="button" onclick="sendSimple('/homework',{class:document.getElementById('schoolClass').value,subject:document.getElementById('subject').value,question:document.getElementById('question').value},'homeworkResult')">Get Explanation</button>
+  <div id="homeworkResult" class="result" hidden></div>
+</section>
+
+<section id="account">
+  <h2>👤 My Account</h2>
+  <p>Account details and video credits will appear here after secure account services are connected.</p>
+  <div id="accountResult" class="result">Account service not connected yet.</div>
+</section>
+
+<section id="admin">
+  <h2>🔐 Private Administrator Area</h2>
+  <p class="muted">Administrator access must be verified by the server. Do not put your admin password or secret keys in this HTML file.</p>
+
+  <label>Administrator email</label>
+  <input id="adminEmail" type="email" autocomplete="username">
+
+  <label>Password</label>
+  <input id="adminPassword" type="password" autocomplete="current-password">
+
+  <button class="button" onclick="adminLogin()">Secure Admin Login</button>
+  <button class="button" onclick="adminPasskey()">Use Device Passkey</button>
+
+  <div id="adminResult" class="result" hidden></div>
+</section>
+
+</main>
+
+<footer>
+  <p>ABDALLAH AI STUDIO</p>
+  <p>Imagine It. Create It. Bring It to Life.</p>
+</footer>
+
+<script>
+"use strict";
+
+/*
+  IMPORTANT:
+  This is the FRONTEND only.
+  Deploy a secure backend at the same origin or configure API_BASE.
+  Never place private API keys, passwords or payment secrets here.
+*/
+const API_BASE = "/api";
+
+/*
+  DEMONSTRATION PRICE:
+  Change this rate in your secure backend.
+  Do not rely on browser-side pricing for real payments.
+*/
+const DEMO_PRICE_PER_MINUTE = 500;
+
+function showPage(id) {
+  document.querySelectorAll("main section").forEach(s => {
+    s.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function addCharacter() {
+  const box = document.createElement("div");
+  box.className = "character";
+
+  box.innerHTML = `
+    <h3>Character / Animal</h3>
+
+    <label>Name</label>
+    <input class="char-name" placeholder="Character name">
+
+    <label>Type</label>
+    <select class="char-type">
+      <option>Human</option>
+      <option>Animal</option>
+      <option>Animated character</option>
+      <option>Other fictional character</option>
+    </select>
+
+    <label>Appearance</label>
+    <textarea class="char-appearance" placeholder="Describe appearance, clothing, age range if fictional, colours and features..."></textarea>
+
+    <label>Movement and actions</label>
+    <textarea class="char-action" placeholder="Describe what this character does and how they move..."></textarea>
+
+    <label>Facial expressions and emotions</label>
+    <input class="char-expression" placeholder="Example: happy, surprised, curious">
+
+    <label>Dialogue</label>
+    <textarea class="char-dialogue" placeholder="Write exactly what this character should say..."></textarea>
+
+    <div class="grid">
+      <div>
+        <label>Language</label>
+        <select class="char-language">
+          <option>English</option>
+          <option>Hausa</option>
+          <option>Arabic</option>
+          <option>French</option>
+          <option>Yoruba</option>
+          <option>Igbo</option>
+          <option>Spanish</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Voice</label>
+        <select class="char-voice">
+          <option>Male voice</option>
+          <option>Female voice</option>
+          <option>Childlike fictional voice</option>
+          <option>Deep narrator</option>
+          <option>Soft voice</option>
+          <option>Energetic voice</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="button" class="button remove-character">Remove Character</button>
+  `;
+
+  box.querySelector(".remove-character").addEventListener("click",()=>box.remove());
+  document.getElementById("characters").appendChild(box);
+}
+
+addCharacter();
+
+function updatePrice() {
+  const field = document.getElementById("minutes");
+  let minutes = Number(field.value);
+
+  if (!Number.isFinite(minutes) || minutes < 5) {
+    minutes = 5;
+  }
+
+  document.getElementById("selectedMinutes").textContent =
+    minutes + (minutes === 1 ? " minute" : " minutes");
+
+  document.getElementById("totalPrice").textContent =
+    "₦" + (minutes * DEMO_PRICE_PER_MINUTE).toLocaleString("en-NG");
+}
+
+document.getElementById("minutes").addEventListener("input",updatePrice);
+updatePrice();
+
+function getCharacters() {
+  return [...document.querySelectorAll(".character")].map(box => ({
+    name:box.querySelector(".char-name").value,
+    type:box.querySelector(".char-type").value,
+    appearance:box.querySelector(".char-appearance").value,
+    actions:box.querySelector(".char-action").value,
+    expression:box.querySelector(".char-expression").value,
+    dialogue:box.querySelector(".char-dialogue").value,
+    language:box.querySelector(".char-language").value,
+    voice:box.querySelector(".char-voice").value
+  }));
+}
+
+async function apiRequest(path,payload) {
+  const response = await fetch(API_BASE + path,{
+    method:"POST",
+    credentials:"same-origin",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+
+  const data = await response.json().catch(()=>({}));
+  if(!response.ok) {
+    throw new Error(data.message || "The service could not complete your request.");
+  }
+  return data;
+}
+
+async function generateVideo() {
+  const minutes = Number(document.getElementById("minutes").value);
+  const result = document.getElementById("videoResult");
+  const button = document.getElementById("generateVideo");
+
+  if(!Number.isInteger(minutes) || minutes < 5 || minutes > 120) {
+    alert("Please enter a duration from 5 to 120 minutes.");
+    return;
+  }
+
+  const story = document.getElementById("story").value.trim();
+  if(!story) {
+    alert("Please describe what should happen in your video.");
+    return;
+  }
+
+  const payload = {
+    style:document.getElementById("style").value,
+    story,
+    setting:document.getElementById("location").value,
+    weather:document.getElementById("weather").value,
+    timeOfDay:document.getElementById("timeofday").value,
+    lighting:document.getElementById("lighting").value,
+    characters:getCharacters(),
+    camera:document.getElementById("camera").value,
+    resolution:document.getElementById("resolution").value,
+    aspectRatio:document.getElementById("format").value,
+    durationMinutes:minutes
+  };
+
+  result.hidden = false;
+  result.textContent = "Connecting to the secure video-generation service...";
+  button.disabled = true;
+
+  try {
+    const data = await apiRequest("/video/generate",payload);
+    result.textContent = data.message || "Your video request has been submitted.";
+    if(data.videoUrl) {
+      const link = document.createElement("a");
+      link.href = data.videoUrl;
+      link.textContent = "View generated video";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      result.appendChild(document.createElement("br"));
+      result.appendChild(link);
+    }
+  } catch(error) {
+    result.textContent = error.message +
+      " The video backend has not yet been connected.";
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function sendSimple(path,payload,resultId) {
+  const result = document.getElementById(resultId);
+  result.hidden = false;
+  result.textContent = "Connecting to the AI service...";
+
+  try {
+    const data = await apiRequest(path,payload);
+    result.textContent = data.message || data.answer || "Request completed.";
+  } catch(error) {
+    result.textContent = error.message +
+      " Connect the relevant backend service to enable this feature.";
+  }
+}
+
+async function adminLogin() {
+  const result = document.getElementById("adminResult");
+  result.hidden = false;
+
+  try {
+    const data = await apiRequest("/admin/login",{
+      email:document.getElementById("adminEmail").value,
+      password:document.getElementById("adminPassword").value
+    });
+    result.textContent = data.message || "Administrator authentication completed.";
+  } catch(error) {
+    result.textContent = error.message +
+      " Secure administrator backend is not connected.";
+  }
+}
+
+async function adminPasskey() {
+  const result = document.getElementById("adminResult");
+  result.hidden = false;
+
+  if(!window.PublicKeyCredential) {
+    result.textContent = "This browser does not support passkeys.";
+    return;
+  }
+
+  result.textContent =
+    "Passkey authentication requires a server-generated challenge and server verification. Connect the WebAuthn backend first.";
+}
+</script>
+
+</body>
+</html>
