@@ -2,635 +2,912 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#07152f">
-<title>ABDALLAH AI STUDIO</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Ultimate Football 2027</title>
 
 <style>
-:root {
-  --bg:#07152f;
-  --panel:#10264b;
-  --blue:#168cff;
-  --gold:#f4c45e;
-  --text:#f4f7ff;
-  --muted:#aabbd5;
-  --border:#29466f;
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+ background:#07111c;
+ color:white;
+ font-family:Arial,sans-serif;
+ overflow:hidden;
+ touch-action:none;
 }
-* {box-sizing:border-box}
-body {
-  margin:0;
-  background:linear-gradient(135deg,#061126,#102b53,#061126);
-  color:var(--text);
-  font-family:Arial,sans-serif;
+
+#game{
+ position:fixed;
+ inset:0;
 }
-header {
-  padding:22px 16px;
-  text-align:center;
-  background:#081a37;
-  border-bottom:2px solid var(--gold);
+
+canvas{display:block}
+
+#hud{
+ position:absolute;
+ top:12px;
+ left:50%;
+ transform:translateX(-50%);
+ display:flex;
+ align-items:center;
+ gap:18px;
+ background:#061421e8;
+ border:1px solid #ffffff40;
+ border-radius:12px;
+ padding:12px 20px;
+ z-index:5;
 }
-header h1 {margin:0;color:var(--gold);font-size:25px}
-header p {color:var(--muted)}
-nav {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:8px;
-  padding:12px;
-  background:#0a1d3b;
-  position:sticky;
-  top:0;
-  z-index:5;
+
+.team{
+ font-weight:bold;
+ font-size:15px;
 }
-nav button,.button {
-  border:0;
-  border-radius:8px;
-  padding:11px 15px;
-  background:var(--blue);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+
+.score{
+ font-size:26px;
+ font-weight:900;
 }
-nav button:hover,.button:hover {background:#086ac7}
-main {max-width:1050px;margin:auto;padding:16px}
-section {
-  display:none;
-  background:rgba(16,38,75,.96);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:20px;
-  margin-bottom:20px;
+
+#timer{
+ font-size:18px;
+ color:#ffd34e;
+ font-weight:bold;
 }
-section.active {display:block}
-h2 {color:var(--gold);margin-top:0}
-h3 {color:#8fcaff}
-label {
-  display:block;
-  margin:13px 0 6px;
-  color:#dceaff;
-  font-weight:bold;
+
+#controls{
+ position:absolute;
+ bottom:20px;
+ left:0;
+ right:0;
+ display:flex;
+ justify-content:space-between;
+ align-items:end;
+ padding:0 25px;
+ z-index:10;
+ pointer-events:none;
 }
-input,select,textarea {
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid #42618d;
-  background:#071a36;
-  color:white;
-  font-size:15px;
+
+#joystick{
+ width:125px;
+ height:125px;
+ border-radius:50%;
+ background:#ffffff22;
+ border:3px solid #ffffff55;
+ position:relative;
+ pointer-events:auto;
 }
-textarea {min-height:85px;resize:vertical}
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px;
+
+#stick{
+ position:absolute;
+ width:52px;
+ height:52px;
+ left:34px;
+ top:34px;
+ border-radius:50%;
+ background:#ffffffb0;
 }
-.card {
-  background:#0a1d3a;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:15px;
-  margin:15px 0;
+
+.buttons{
+ display:grid;
+ grid-template-columns:repeat(2,70px);
+ gap:12px;
+ pointer-events:auto;
 }
-.gold {color:var(--gold)}
-.muted {color:var(--muted);font-size:13px;line-height:1.6}
-.result {
-  padding:15px;
-  margin-top:15px;
-  background:#06162e;
-  border:1px solid var(--blue);
-  border-radius:10px;
+
+.btn{
+ width:70px;
+ height:70px;
+ border-radius:50%;
+ border:2px solid white;
+ background:#0755a9dd;
+ color:white;
+ font-weight:bold;
+ font-size:12px;
 }
-.character {
-  border:1px solid #42618d;
-  padding:15px;
-  border-radius:10px;
-  margin:12px 0;
+
+.btn:active{background:#e5a900}
+
+#menu{
+ position:absolute;
+ inset:0;
+ z-index:20;
+ background:linear-gradient(135deg,#061d35,#07111c);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:20px;
 }
-.danger {color:#ffb4b4}
-footer {
-  text-align:center;
-  padding:25px;
-  color:var(--muted);
+
+#menu h1{
+ color:#ffcf40;
+ font-size:35px;
+ margin-bottom:12px;
 }
-button:disabled {opacity:.5;cursor:not-allowed}
+
+#menu p{
+ color:#ddd;
+ line-height:1.6;
+ margin-bottom:25px;
+}
+
+#start{
+ background:#e9aa14;
+ border:0;
+ border-radius:10px;
+ padding:16px 45px;
+ font-size:18px;
+ font-weight:bold;
+}
+
+#message{
+ position:absolute;
+ top:95px;
+ left:50%;
+ transform:translateX(-50%);
+ color:#ffdb5b;
+ font-size:25px;
+ font-weight:900;
+ z-index:8;
+}
+
+#restart{
+ position:absolute;
+ top:15px;
+ right:12px;
+ z-index:10;
+ padding:10px;
+ background:#122b45;
+ color:white;
+ border:1px solid white;
+ border-radius:8px;
+}
+
+@media(orientation:portrait){
+ #menu h1{font-size:27px}
+ #controls{padding:0 12px;bottom:12px}
+ #joystick{width:105px;height:105px}
+ #stick{left:27px;top:27px}
+ .btn{width:58px;height:58px}
+ .buttons{grid-template-columns:repeat(2,58px)}
+}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>ABDALLAH AI STUDIO</h1>
-  <p>Imagine It. Create It. Bring It to Life.</p>
-</header>
+<div id="game"></div>
 
-<nav>
-  <button onclick="showPage('home')">Home</button>
-  <button onclick="showPage('video')">AI Video</button>
-  <button onclick="showPage('image')">AI Images</button>
-  <button onclick="showPage('voice')">AI Voice</button>
-  <button onclick="showPage('friend')">AI Friend</button>
-  <button onclick="showPage('homework')">Homework</button>
-  <button onclick="showPage('account')">Account</button>
-  <button onclick="showPage('admin')">Admin</button>
-</nav>
+<div id="hud">
+ <span class="team">BLUE</span>
+ <span class="score" id="score">0 - 0</span>
+ <span class="team">RED</span>
+ <span id="timer">00:00</span>
+</div>
 
-<main>
+<div id="message"></div>
 
-<section id="home" class="active">
-  <h2>Welcome to ABDALLAH AI STUDIO</h2>
-  <p>Create videos, images, voices and learn with AI.</p>
+<button id="restart">RESTART</button>
 
-  <div class="grid">
-    <div class="card">
-      <h3>🎬 AI Video Generator</h3>
-      <p>Describe your video and customise its scenes.</p>
-      <button class="button" onclick="showPage('video')">Create Video</button>
-    </div>
-    <div class="card">
-      <h3>🖼️ AI Image Generator</h3>
-      <p>Turn your ideas into images.</p>
-      <button class="button" onclick="showPage('image')">Create Image</button>
-    </div>
-    <div class="card">
-      <h3>🎙️ AI Voice Generator</h3>
-      <p>Create voice content in different languages.</p>
-      <button class="button" onclick="showPage('voice')">Create Voice</button>
-    </div>
-    <div class="card">
-      <h3>📚 Homework Assistant</h3>
-      <p>Get explanations and learning support.</p>
-      <button class="button" onclick="showPage('homework')">Start Learning</button>
-    </div>
-  </div>
-</section>
+<div id="controls">
 
-<section id="video">
-  <h2>🎬 AI Video Studio</h2>
-  <p class="muted">Describe exactly what you want the AI to create.</p>
+ <div id="joystick">
+  <div id="stick"></div>
+ </div>
 
-  <label>Video category</label>
-  <select id="style">
-    <option>Realistic Human</option>
-    <option>2D Animation</option>
-    <option>3D Animation</option>
-    <option>3D Cartoon</option>
-    <option>Talking Animals</option>
-    <option>Educational Video</option>
-    <option>Fantasy</option>
-    <option>Cinematic Movie Scene</option>
-    <option>Documentary</option>
-    <option>Other</option>
-  </select>
+ <div class="buttons">
+  <button class="btn" id="pass">PASS</button>
+  <button class="btn" id="shoot">SHOOT</button>
+  <button class="btn" id="sprint">SPRINT</button>
+  <button class="btn" id="switch">SWITCH</button>
+ </div>
 
-  <h3>Scene description</h3>
+</div>
 
-  <label>What should happen in the video?</label>
-  <textarea id="story" placeholder="Describe the complete story, events and actions from beginning to end..."></textarea>
+<div id="menu">
+ <h1>⚽ ULTIMATE FOOTBALL 2027</h1>
+ <p>
+  3D FOOTBALL EXPERIENCE<br>
+  Choose your team and enter the stadium.<br>
+  Control your players and score goals!
+ </p>
+ <button id="start">START MATCH</button>
+ <p style="margin-top:20px;font-size:12px">
+  Designed as an original football game.
+ </p>
+</div>
 
-  <div class="grid">
-    <div>
-      <label>Location / Setting</label>
-      <input id="location" placeholder="Example: school, house, hospital, market">
-    </div>
-    <div>
-      <label>Weather</label>
-      <select id="weather">
-        <option>Sunny</option>
-        <option>Rainy</option>
-        <option>Cloudy</option>
-        <option>Snowy</option>
-        <option>Windy</option>
-        <option>Stormy</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div>
-      <label>Time of day</label>
-      <select id="timeofday">
-        <option>Morning</option>
-        <option>Afternoon</option>
-        <option>Evening</option>
-        <option>Night</option>
-        <option>Sunrise</option>
-        <option>Sunset</option>
-      </select>
-    </div>
-    <div>
-      <label>Lighting</label>
-      <select id="lighting">
-        <option>Natural lighting</option>
-        <option>Bright lighting</option>
-        <option>Soft cinematic lighting</option>
-        <option>Dark dramatic lighting</option>
-        <option>Colourful lighting</option>
-      </select>
-    </div>
-  </div>
+<script type="module">
 
-  <h3>Characters and dialogue</h3>
-  <p class="muted">Add as many characters or animals as your scene needs. Each can have their own dialogue and voice.</p>
+import * as THREE from
+'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
-  <div id="characters"></div>
+/* SCENE */
 
-  <button class="button" type="button" onclick="addCharacter()">+ Add Character / Animal</button>
+const scene = new THREE.Scene();
 
-  <h3>Camera and video quality</h3>
+scene.background = new THREE.Color(0x87b9d9);
 
-  <div class="grid">
-    <div>
-      <label>Camera style</label>
-      <select id="camera">
-        <option>Cinematic camera</option>
-        <option>Close-up</option>
-        <option>Wide shot</option>
-        <option>Bird's-eye view</option>
-        <option>First-person view</option>
-        <option>Tracking shot</option>
-        <option>Professional documentary</option>
-      </select>
-    </div>
+scene.fog = new THREE.Fog(0x87b9d9,65,150);
 
-    <div>
-      <label>Video resolution</label>
-      <select id="resolution">
-        <option>1080p Full HD</option>
-        <option>480p</option>
-        <option>720p HD</option>
-        <option>2K</option>
-        <option>4K</option>
-      </select>
-    </div>
+const camera = new THREE.PerspectiveCamera(
+ 60,innerWidth/innerHeight,0.1,300
+);
 
-    <div>
-      <label>Video format</label>
-      <select id="format">
-        <option>16:9 Landscape</option>
-        <option>9:16 Portrait</option>
-        <option>1:1 Square</option>
-      </select>
-    </div>
+camera.position.set(0,35,48);
 
-    <div>
-      <label>Duration (minimum 5 minutes)</label>
-      <input type="number" id="minutes" min="5" max="120" value="5">
-      <p class="muted">Enter 5 minutes or more. Actual maximum depends on the connected AI video provider.</p>
-    </div>
-  </div>
+const renderer = new THREE.WebGLRenderer({
+ antialias:true
+});
 
-  <div class="card">
-    <h3>💳 Estimated charge</h3>
-    <p>Price per minute: <strong id="rate">₦500</strong></p>
-    <p>Selected duration: <strong id="selectedMinutes">5 minutes</strong></p>
-    <h2 class="gold" id="totalPrice">₦2,500</h2>
-    <p class="muted">These are demonstration prices. Set your real prices in your secure backend before accepting payments.</p>
-  </div>
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
-  <button class="button" id="generateVideo" onclick="generateVideo()">Generate Video</button>
+document.getElementById("game").appendChild(renderer.domElement);
 
-  <div id="videoResult" class="result" hidden></div>
-</section>
+/* LIGHTING */
 
-<section id="image">
-  <h2>🖼️ AI Image Generator</h2>
-  <label>Describe your image</label>
-  <textarea id="imagePrompt" placeholder="Describe the image you want..."></textarea>
-  <label>Image style</label>
-  <select id="imageStyle">
-    <option>Realistic</option>
-    <option>3D Cartoon</option>
-    <option>2D Animation</option>
-    <option>Professional Photography</option>
-    <option>Digital Art</option>
-  </select>
-  <button class="button" onclick="sendSimple('/image/generate',{prompt:document.getElementById('imagePrompt').value,style:document.getElementById('imageStyle').value},'imageResult')">Generate Image</button>
-  <div id="imageResult" class="result" hidden></div>
-</section>
+scene.add(new THREE.HemisphereLight(0xffffff,0x365b32,2));
 
-<section id="voice">
-  <h2>🎙️ AI Voice Generator</h2>
-  <label>Text to speak</label>
-  <textarea id="voiceText" placeholder="Enter the words you want spoken..."></textarea>
-  <div class="grid">
-    <div>
-      <label>Language</label>
-      <select id="voiceLanguage">
-        <option>English</option>
-        <option>Hausa</option>
-        <option>Arabic</option>
-        <option>French</option>
-        <option>Yoruba</option>
-        <option>Igbo</option>
-        <option>Spanish</option>
-      </select>
-    </div>
-    <div>
-      <label>Voice type</label>
-      <select id="voiceType">
-        <option>Male</option>
-        <option>Female</option>
-        <option>Childlike fictional voice</option>
-        <option>Professional narrator</option>
-      </select>
-    </div>
-  </div>
-  <button class="button" onclick="sendSimple('/voice/generate',{text:document.getElementById('voiceText').value,language:document.getElementById('voiceLanguage').value,voice:document.getElementById('voiceType').value},'voiceResult')">Generate Voice</button>
-  <div id="voiceResult" class="result" hidden></div>
-</section>
+const sun=new THREE.DirectionalLight(0xffffff,2.5);
+sun.position.set(-25,50,30);
+sun.castShadow=true;
+scene.add(sun);
 
-<section id="friend">
-  <h2>🤖 AI Friend</h2>
-  <label>Your message</label>
-  <textarea id="friendMessage" placeholder="Ask your AI assistant something..."></textarea>
-  <button class="button" onclick="sendSimple('/chat',{message:document.getElementById('friendMessage').value},'friendResult')">Send Message</button>
-  <div id="friendResult" class="result" hidden></div>
-</section>
+/* STADIUM */
 
-<section id="homework">
-  <h2>📚 Homework Assistant</h2>
-  <div class="grid">
-    <div>
-      <label>Class</label>
-      <select id="schoolClass">
-        <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
-        <option>SSS 1</option><option>SSS 2</option><option>SSS 3</option>
-      </select>
-    </div>
-    <div>
-      <label>Subject</label>
-      <input id="subject" placeholder="Example: Mathematics">
-    </div>
-  </div>
-  <label>Question</label>
-  <textarea id="question" placeholder="Enter your question..."></textarea>
-  <button class="button" onclick="sendSimple('/homework',{class:document.getElementById('schoolClass').value,subject:document.getElementById('subject').value,question:document.getElementById('question').value},'homeworkResult')">Get Explanation</button>
-  <div id="homeworkResult" class="result" hidden></div>
-</section>
+const pitchWidth=40;
+const pitchLength=65;
 
-<section id="account">
-  <h2>👤 My Account</h2>
-  <p>Account details and video credits will appear here after secure account services are connected.</p>
-  <div id="accountResult" class="result">Account service not connected yet.</div>
-</section>
+const grass=new THREE.Mesh(
+ new THREE.PlaneGeometry(pitchWidth,pitchLength),
+ new THREE.MeshStandardMaterial({color:0x187a35})
+);
 
-<section id="admin">
-  <h2>🔐 Private Administrator Area</h2>
-  <p class="muted">Administrator access must be verified by the server. Do not put your admin password or secret keys in this HTML file.</p>
+grass.rotation.x=-Math.PI/2;
+grass.receiveShadow=true;
+scene.add(grass);
 
-  <label>Administrator email</label>
-  <input id="adminEmail" type="email" autocomplete="username">
+for(let i=0;i<13;i++){
 
-  <label>Password</label>
-  <input id="adminPassword" type="password" autocomplete="current-password">
+ const stripe=new THREE.Mesh(
+  new THREE.PlaneGeometry(40,5),
+  new THREE.MeshBasicMaterial({
+   color:i%2===0?0x238b40:0x197534
+  })
+ );
 
-  <button class="button" onclick="adminLogin()">Secure Admin Login</button>
-  <button class="button" onclick="adminPasskey()">Use Device Passkey</button>
-
-  <div id="adminResult" class="result" hidden></div>
-</section>
-
-</main>
-
-<footer>
-  <p>ABDALLAH AI STUDIO</p>
-  <p>Imagine It. Create It. Bring It to Life.</p>
-</footer>
-
-<script>
-"use strict";
-
-/*
-  IMPORTANT:
-  This is the FRONTEND only.
-  Deploy a secure backend at the same origin or configure API_BASE.
-  Never place private API keys, passwords or payment secrets here.
-*/
-const API_BASE = "/api";
-
-/*
-  DEMONSTRATION PRICE:
-  Change this rate in your secure backend.
-  Do not rely on browser-side pricing for real payments.
-*/
-const DEMO_PRICE_PER_MINUTE = 500;
-
-function showPage(id) {
-  document.querySelectorAll("main section").forEach(s => {
-    s.classList.remove("active");
-  });
-  document.getElementById(id).classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
+ stripe.rotation.x=-Math.PI/2;
+ stripe.position.set(0,0.015,-30+i*5);
+ scene.add(stripe);
 }
 
-function addCharacter() {
-  const box = document.createElement("div");
-  box.className = "character";
+/* FIELD LINES */
 
-  box.innerHTML = `
-    <h3>Character / Animal</h3>
+function line(x1,z1,x2,z2){
 
-    <label>Name</label>
-    <input class="char-name" placeholder="Character name">
+ const points=[
+  new THREE.Vector3(x1,0.06,z1),
+  new THREE.Vector3(x2,0.06,z2)
+ ];
 
-    <label>Type</label>
-    <select class="char-type">
-      <option>Human</option>
-      <option>Animal</option>
-      <option>Animated character</option>
-      <option>Other fictional character</option>
-    </select>
+ const geometry=new THREE.BufferGeometry().setFromPoints(points);
 
-    <label>Appearance</label>
-    <textarea class="char-appearance" placeholder="Describe appearance, clothing, age range if fictional, colours and features..."></textarea>
-
-    <label>Movement and actions</label>
-    <textarea class="char-action" placeholder="Describe what this character does and how they move..."></textarea>
-
-    <label>Facial expressions and emotions</label>
-    <input class="char-expression" placeholder="Example: happy, surprised, curious">
-
-    <label>Dialogue</label>
-    <textarea class="char-dialogue" placeholder="Write exactly what this character should say..."></textarea>
-
-    <div class="grid">
-      <div>
-        <label>Language</label>
-        <select class="char-language">
-          <option>English</option>
-          <option>Hausa</option>
-          <option>Arabic</option>
-          <option>French</option>
-          <option>Yoruba</option>
-          <option>Igbo</option>
-          <option>Spanish</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div>
-        <label>Voice</label>
-        <select class="char-voice">
-          <option>Male voice</option>
-          <option>Female voice</option>
-          <option>Childlike fictional voice</option>
-          <option>Deep narrator</option>
-          <option>Soft voice</option>
-          <option>Energetic voice</option>
-        </select>
-      </div>
-    </div>
-
-    <button type="button" class="button remove-character">Remove Character</button>
-  `;
-
-  box.querySelector(".remove-character").addEventListener("click",()=>box.remove());
-  document.getElementById("characters").appendChild(box);
+ scene.add(new THREE.Line(
+  geometry,
+  new THREE.LineBasicMaterial({color:0xffffff})
+ ));
 }
 
-addCharacter();
+line(-20,-32.5,20,-32.5);
+line(-20,32.5,20,32.5);
+line(-20,-32.5,-20,32.5);
+line(20,-32.5,20,32.5);
+line(-20,0,20,0);
 
-function updatePrice() {
-  const field = document.getElementById("minutes");
-  let minutes = Number(field.value);
+const circle=new THREE.Mesh(
+ new THREE.RingGeometry(7.8,8,64),
+ new THREE.MeshBasicMaterial({
+  color:0xffffff,
+  side:THREE.DoubleSide
+ })
+);
 
-  if (!Number.isFinite(minutes) || minutes < 5) {
-    minutes = 5;
+circle.rotation.x=-Math.PI/2;
+circle.position.y=0.07;
+scene.add(circle);
+
+/* GOALS */
+
+function createGoal(z){
+
+ const group=new THREE.Group();
+
+ const material=new THREE.MeshStandardMaterial({
+  color:0xffffff
+ });
+
+ function pole(x,y,zpos,sx,sy,sz){
+
+  const m=new THREE.Mesh(
+   new THREE.BoxGeometry(sx,sy,sz),
+   material
+  );
+
+  m.position.set(x,y,zpos);
+  group.add(m);
+ }
+
+ pole(-4,2,z,0.2,4,0.2);
+ pole(4,2,z,0.2,4,0.2);
+ pole(0,4,z,8,0.2,0.2);
+
+ scene.add(group);
+}
+
+createGoal(-33);
+createGoal(33);
+
+/* STADIUM STANDS */
+
+for(let side of [-1,1]){
+
+ const stand=new THREE.Mesh(
+  new THREE.BoxGeometry(7,7,75),
+  new THREE.MeshStandardMaterial({color:0x263c54})
+ );
+
+ stand.position.set(side*25,3.5,0);
+ scene.add(stand);
+}
+
+for(let z of [-39,39]){
+
+ const stand=new THREE.Mesh(
+  new THREE.BoxGeometry(55,7,7),
+  new THREE.MeshStandardMaterial({color:0x263c54})
+ );
+
+ stand.position.set(0,3.5,z);
+ scene.add(stand);
+}
+
+/* PLAYERS */
+
+function makePlayer(color,x,z){
+
+ const group=new THREE.Group();
+
+ const shirt=new THREE.Mesh(
+  new THREE.CapsuleGeometry(0.65,1.1,4,8),
+  new THREE.MeshStandardMaterial({color})
+ );
+
+ shirt.position.y=1.5;
+ shirt.castShadow=true;
+ group.add(shirt);
+
+ const head=new THREE.Mesh(
+  new THREE.SphereGeometry(0.38,12,12),
+  new THREE.MeshStandardMaterial({color:0xe0ad83})
+ );
+
+ head.position.y=2.65;
+ group.add(head);
+
+ for(let side of [-1,1]){
+
+  const leg=new THREE.Mesh(
+   new THREE.BoxGeometry(0.3,0.9,0.35),
+   new THREE.MeshStandardMaterial({color:0x182334})
+  );
+
+  leg.position.set(side*0.3,0.45,0);
+  group.add(leg);
+ }
+
+ group.position.set(x,0,z);
+
+ scene.add(group);
+
+ return group;
+}
+
+/* TEAMS */
+
+const blue=[];
+const red=[];
+
+const bluePositions=[
+ [0,20],[-9,17],[9,17],[-12,7],[12,7],
+ [-7,-5],[7,-5],[0,-15]
+];
+
+const redPositions=[
+ [0,-20],[-9,-17],[9,-17],[-12,-7],[12,-7],
+ [-7,5],[7,5],[0,15]
+];
+
+bluePositions.forEach((p,i)=>{
+ blue.push(makePlayer(0x0874e8,p[0],p[1]));
+});
+
+redPositions.forEach((p,i)=>{
+ red.push(makePlayer(0xd62d36,p[0],p[1]));
+});
+
+let active=blue[0];
+
+/* BALL */
+
+const ball=new THREE.Mesh(
+ new THREE.SphereGeometry(0.55,24,24),
+ new THREE.MeshStandardMaterial({
+  color:0xffffff,
+  roughness:0.65
+ })
+);
+
+ball.position.set(0,0.55,0);
+ball.castShadow=true;
+scene.add(ball);
+
+let velocity=new THREE.Vector3();
+
+/* GAME VARIABLES */
+
+let scoreBlue=0;
+let scoreRed=0;
+let elapsed=0;
+let playing=false;
+let sprinting=false;
+
+const joystick={x:0,y:0};
+
+const scoreElement=document.getElementById("score");
+const timerElement=document.getElementById("timer");
+const message=document.getElementById("message");
+
+function updateScore(){
+
+ scoreElement.textContent=
+ scoreBlue+" - "+scoreRed;
+}
+
+function resetBall(){
+
+ ball.position.set(0,0.55,0);
+ velocity.set(0,0,0);
+
+ blue.forEach((p,i)=>{
+  p.position.set(...bluePositions[i],0);
+  p.position.y=0;
+ });
+
+ red.forEach((p,i)=>{
+  p.position.set(...redPositions[i],0);
+  p.position.y=0;
+ });
+
+ active=blue[0];
+}
+
+/* JOYSTICK */
+
+const joystickElement=document.getElementById("joystick");
+const stick=document.getElementById("stick");
+
+let joystickActive=false;
+
+function joystickMove(e){
+
+ const rect=joystickElement.getBoundingClientRect();
+
+ const cx=rect.left+rect.width/2;
+ const cy=rect.top+rect.height/2;
+
+ let dx=e.clientX-cx;
+ let dy=e.clientY-cy;
+
+ const max=42;
+ const length=Math.hypot(dx,dy);
+
+ if(length>max){
+  dx=dx/length*max;
+  dy=dy/length*max;
+ }
+
+ joystick.x=dx/max;
+ joystick.y=dy/max;
+
+ stick.style.left=(34+dx)+"px";
+ stick.style.top=(34+dy)+"px";
+}
+
+joystickElement.addEventListener("pointerdown",e=>{
+ joystickActive=true;
+ joystickElement.setPointerCapture(e.pointerId);
+ joystickMove(e);
+});
+
+joystickElement.addEventListener("pointermove",e=>{
+ if(joystickActive)joystickMove(e);
+});
+
+function stopJoystick(){
+
+ joystickActive=false;
+ joystick.x=0;
+ joystick.y=0;
+
+ stick.style.left="34px";
+ stick.style.top="34px";
+}
+
+joystickElement.addEventListener("pointerup",stopJoystick);
+joystickElement.addEventListener("pointercancel",stopJoystick);
+
+/* KEYBOARD */
+
+const keys={};
+
+window.addEventListener("keydown",e=>{
+ keys[e.key.toLowerCase()]=true;
+});
+
+window.addEventListener("keyup",e=>{
+ keys[e.key.toLowerCase()]=false;
+});
+
+/* SHOOT */
+
+function shoot(){
+
+ if(!playing)return;
+
+ const distance=active.position.distanceTo(ball.position);
+
+ if(distance<3.5){
+
+  const direction=new THREE.Vector3(
+   -ball.position.x,
+   0,
+   -Math.sign(ball.position.z)
+  );
+
+  direction.normalize();
+
+  velocity.copy(direction.multiplyScalar(17));
+  velocity.y=4;
+ }
+}
+
+/* PASS */
+
+function pass(){
+
+ if(!playing)return;
+
+ const distance=active.position.distanceTo(ball.position);
+
+ if(distance<3.5){
+
+  const teammate=blue.find(p=>
+   p!==active
+  );
+
+  const direction=teammate.position.clone()
+   .sub(ball.position)
+   .normalize();
+
+  velocity.copy(direction.multiplyScalar(12));
+ }
+}
+
+/* SPRINT */
+
+document.getElementById("sprint")
+.addEventListener("pointerdown",()=>sprinting=true);
+
+document.getElementById("sprint")
+.addEventListener("pointerup",()=>sprinting=false);
+
+document.getElementById("sprint")
+.addEventListener("pointercancel",()=>sprinting=false);
+
+document.getElementById("shoot").addEventListener("click",shoot);
+document.getElementById("pass").addEventListener("click",pass);
+
+document.getElementById("switch").addEventListener("click",()=>{
+
+ let nearest=blue
+ .filter(p=>p!==active)
+ .sort((a,b)=>
+  a.position.distanceTo(ball.position)-
+  b.position.distanceTo(ball.position)
+ )[0];
+
+ if(nearest)active=nearest;
+});
+
+/* PLAYER MOVEMENT */
+
+function movePlayer(){
+
+ let x=joystick.x;
+ let z=joystick.y;
+
+ if(keys["a"]||keys["arrowleft"])x=-1;
+ if(keys["d"]||keys["arrowright"])x=1;
+ if(keys["w"]||keys["arrowup"])z=-1;
+ if(keys["s"]||keys["arrowdown"])z=1;
+
+ const direction=new THREE.Vector3(x,0,z);
+
+ if(direction.length()>1)direction.normalize();
+
+ const speed=sprinting||keys["shift"]?13:8;
+
+ active.position.x+=direction.x*speed/60;
+ active.position.z+=direction.z*speed/60;
+
+ active.position.x=THREE.MathUtils.clamp(
+  active.position.x,-19,19
+ );
+
+ active.position.z=THREE.MathUtils.clamp(
+  active.position.z,-31,31
+ );
+
+ if(direction.length()>0.05){
+
+  active.rotation.y=Math.atan2(
+   direction.x,direction.z
+  );
+ }
+}
+
+/* BALL MOVEMENT */
+
+function updateBall(){
+
+ const distance=active.position.distanceTo(ball.position);
+
+ if(distance<1.8){
+
+  const direction=new THREE.Vector3(
+   joystick.x,0,joystick.y
+  );
+
+  if(direction.length()>0.1){
+
+   velocity.x+=direction.x*0.12;
+   velocity.z+=direction.z*0.12;
+
+  }else{
+
+   const follow=active.position.clone()
+   .sub(ball.position);
+
+   follow.y=0;
+
+   if(follow.length()>0.01){
+    velocity.x+=follow.x*0.025;
+    velocity.z+=follow.z*0.025;
+   }
+  }
+ }
+
+ ball.position.x+=velocity.x/60;
+ ball.position.z+=velocity.z/60;
+
+ velocity.multiplyScalar(0.985);
+
+ ball.position.y=Math.max(
+  0.55,
+  ball.position.y+velocity.y/60
+ );
+
+ if(ball.position.y<=0.56){
+  velocity.y=0;
+ }else{
+  velocity.y-=12/60;
+ }
+
+ ball.rotation.x+=velocity.z*0.03;
+ ball.rotation.z-=velocity.x*0.03;
+
+ /* FIELD BOUNDARIES */
+
+ if(Math.abs(ball.position.x)>19.5){
+  velocity.x*=-0.7;
+ }
+
+ if(Math.abs(ball.position.z)>32){
+
+  if(Math.abs(ball.position.x)<4){
+
+   if(ball.position.z<0)scoreBlue++;
+   else scoreRed++;
+
+   updateScore();
+
+   message.textContent="GOOOOOAL! ⚽";
+
+   setTimeout(()=>{
+    message.textContent="";
+   },1800);
+
+   resetBall();
+
+  }else{
+   velocity.z*=-0.7;
+  }
+ }
+}
+
+/* OPPONENT AI */
+
+function updateAI(){
+
+ red.forEach((player,i)=>{
+
+  const target=i===0?ball.position:blue[i].position;
+
+  const direction=target.clone()
+   .sub(player.position);
+
+  direction.y=0;
+
+  if(direction.length()>1){
+   direction.normalize();
+
+   player.position.add(
+    direction.multiplyScalar(0.035)
+   );
   }
 
-  document.getElementById("selectedMinutes").textContent =
-    minutes + (minutes === 1 ? " minute" : " minutes");
+  player.position.x=THREE.MathUtils.clamp(
+   player.position.x,-19,19
+  );
 
-  document.getElementById("totalPrice").textContent =
-    "₦" + (minutes * DEMO_PRICE_PER_MINUTE).toLocaleString("en-NG");
-}
+  player.position.z=THREE.MathUtils.clamp(
+   player.position.z,-31,31
+  );
 
-document.getElementById("minutes").addEventListener("input",updatePrice);
-updatePrice();
+  if(player.position.distanceTo(ball.position)<1.5){
 
-function getCharacters() {
-  return [...document.querySelectorAll(".character")].map(box => ({
-    name:box.querySelector(".char-name").value,
-    type:box.querySelector(".char-type").value,
-    appearance:box.querySelector(".char-appearance").value,
-    actions:box.querySelector(".char-action").value,
-    expression:box.querySelector(".char-expression").value,
-    dialogue:box.querySelector(".char-dialogue").value,
-    language:box.querySelector(".char-language").value,
-    voice:box.querySelector(".char-voice").value
-  }));
-}
+   const kick=ball.position.clone()
+   .sub(player.position);
 
-async function apiRequest(path,payload) {
-  const response = await fetch(API_BASE + path,{
-    method:"POST",
-    credentials:"same-origin",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(payload)
-  });
+   kick.y=0;
 
-  const data = await response.json().catch(()=>({}));
-  if(!response.ok) {
-    throw new Error(data.message || "The service could not complete your request.");
-  }
-  return data;
-}
+   if(kick.length()>0.01){
+    kick.normalize();
 
-async function generateVideo() {
-  const minutes = Number(document.getElementById("minutes").value);
-  const result = document.getElementById("videoResult");
-  const button = document.getElementById("generateVideo");
-
-  if(!Number.isInteger(minutes) || minutes < 5 || minutes > 120) {
-    alert("Please enter a duration from 5 to 120 minutes.");
-    return;
+    velocity.add(
+     kick.multiplyScalar(0.18)
+    );
+   }
   }
 
-  const story = document.getElementById("story").value.trim();
-  if(!story) {
-    alert("Please describe what should happen in your video.");
-    return;
-  }
-
-  const payload = {
-    style:document.getElementById("style").value,
-    story,
-    setting:document.getElementById("location").value,
-    weather:document.getElementById("weather").value,
-    timeOfDay:document.getElementById("timeofday").value,
-    lighting:document.getElementById("lighting").value,
-    characters:getCharacters(),
-    camera:document.getElementById("camera").value,
-    resolution:document.getElementById("resolution").value,
-    aspectRatio:document.getElementById("format").value,
-    durationMinutes:minutes
-  };
-
-  result.hidden = false;
-  result.textContent = "Connecting to the secure video-generation service...";
-  button.disabled = true;
-
-  try {
-    const data = await apiRequest("/video/generate",payload);
-    result.textContent = data.message || "Your video request has been submitted.";
-    if(data.videoUrl) {
-      const link = document.createElement("a");
-      link.href = data.videoUrl;
-      link.textContent = "View generated video";
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      result.appendChild(document.createElement("br"));
-      result.appendChild(link);
-    }
-  } catch(error) {
-    result.textContent = error.message +
-      " The video backend has not yet been connected.";
-  } finally {
-    button.disabled = false;
-  }
+ });
 }
 
-async function sendSimple(path,payload,resultId) {
-  const result = document.getElementById(resultId);
-  result.hidden = false;
-  result.textContent = "Connecting to the AI service...";
+/* CAMERA */
 
-  try {
-    const data = await apiRequest(path,payload);
-    result.textContent = data.message || data.answer || "Request completed.";
-  } catch(error) {
-    result.textContent = error.message +
-      " Connect the relevant backend service to enable this feature.";
-  }
+function updateCamera(){
+
+ const target=active.position;
+
+ const desired=new THREE.Vector3(
+  target.x,
+  29,
+  target.z+35
+ );
+
+ camera.position.lerp(desired,0.06);
+
+ camera.lookAt(
+  target.x,
+  0,
+  target.z-3
+ );
 }
 
-async function adminLogin() {
-  const result = document.getElementById("adminResult");
-  result.hidden = false;
+/* TIMER */
 
-  try {
-    const data = await apiRequest("/admin/login",{
-      email:document.getElementById("adminEmail").value,
-      password:document.getElementById("adminPassword").value
-    });
-    result.textContent = data.message || "Administrator authentication completed.";
-  } catch(error) {
-    result.textContent = error.message +
-      " Secure administrator backend is not connected.";
-  }
+function updateTimer(delta){
+
+ elapsed+=delta;
+
+ const minutes=Math.floor(elapsed/60);
+ const seconds=Math.floor(elapsed%60);
+
+ timerElement.textContent=
+ String(minutes).padStart(2,"0")+":"+
+ String(seconds).padStart(2,"0");
+
 }
 
-async function adminPasskey() {
-  const result = document.getElementById("adminResult");
-  result.hidden = false;
+/* GAME LOOP */
 
-  if(!window.PublicKeyCredential) {
-    result.textContent = "This browser does not support passkeys.";
-    return;
-  }
+let last=performance.now();
 
-  result.textContent =
-    "Passkey authentication requires a server-generated challenge and server verification. Connect the WebAuthn backend first.";
+function animate(now){
+
+ requestAnimationFrame(animate);
+
+ const delta=Math.min((now-last)/1000,0.05);
+ last=now;
+
+ if(playing){
+
+  movePlayer();
+  updateBall();
+  updateAI();
+  updateCamera();
+  updateTimer(delta);
+
+ }
+
+ renderer.render(scene,camera);
 }
+
+requestAnimationFrame(animate);
+
+/* START MATCH */
+
+document.getElementById("start")
+.addEventListener("click",()=>{
+
+ playing=true;
+
+ document.getElementById("menu").style.display="none";
+
+ elapsed=0;
+ scoreBlue=0;
+ scoreRed=0;
+
+ updateScore();
+ resetBall();
+
+});
+
+/* RESTART */
+
+document.getElementById("restart")
+.addEventListener("click",()=>{
+
+ scoreBlue=0;
+ scoreRed=0;
+ elapsed=0;
+
+ updateScore();
+ resetBall();
+
+ message.textContent="MATCH RESTARTED";
+
+ setTimeout(()=>{
+  message.textContent="";
+ },1500);
+
+});
+
+/* RESPONSIVE SCREEN */
+
+window.addEventListener("resize",()=>{
+
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
+
+ renderer.setSize(innerWidth,innerHeight);
+
+});
+
 </script>
-
 </body>
 </html>
